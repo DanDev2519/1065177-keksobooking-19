@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Данил Остряков](https://up.htmlacademy.ru/javascript/19/user/1065177).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Мирошниченко](https://up.htmlacademy.ru/javascript/19/user/591417).
 
 ---
 
