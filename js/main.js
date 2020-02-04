@@ -1,10 +1,12 @@
 'use strict';
 
-var offerType = ['palace', 'flat', 'house', 'bungalo'];
-var offerCheckin = ['12:00', '13:00', '14:00'];
-var offerCheckout = ['12:00', '13:00', '14:00'];
-var offerFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var numberOfOffers = 8;
+var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
+var OFFER_CHECKIN = ['12:00', '13:00', '14:00'];
+var OFFER_CHECKOUT = ['12:00', '13:00', '14:00'];
+var OFFER_FEATURE = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var NUMBER_OF_OFFERS = 8;
+var WIDTH_PIN = 50;
+var HEIGHT_PIN = 70;
 
 var map = document.querySelector('.map');
 var mapPins = map.querySelector('.map__pins');
@@ -23,16 +25,12 @@ var getLeadingZeros = function (num, size) {
 
 // Функция получения случайного целого числа из диапазона, не сключая max
 var getRandomInt = function (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min) + min);
 };
 
 // Функция получения случайного целого числа из диапазона, включительно
 var getRandomIntInclusive = function (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.ceil(Math.random() * (max - min + 1) + min);
 };
 
 // Функция генерации массива случайной длины из другого массива с вариантам без повтора
@@ -78,12 +76,12 @@ var getAdList = function (quantity) {
       title: 'Заголовок предложения №' + getLeadingZeros(getRandomIntInclusive(1, 500), 4),
       address: ad.location.x + ', ' + ad.location.y,
       price: getRandomIntInclusive(500, 10000),
-      type: offerType[getRandomInt(0, offerType.length)],
+      type: OFFER_TYPE[getRandomInt(0, OFFER_TYPE.length)],
       rooms: getRandomIntInclusive(1, 4),
       guests: getRandomIntInclusive(1, 4),
-      checkin: offerCheckin[getRandomInt(0, offerCheckin.length)],
-      checkout: offerCheckout[getRandomInt(0, offerCheckout.length)],
-      features: getArrayNoRepeatFrom(offerFeatures),
+      checkin: OFFER_CHECKIN[getRandomInt(0, OFFER_CHECKIN.length)],
+      checkout: OFFER_CHECKOUT[getRandomInt(0, OFFER_CHECKOUT.length)],
+      features: getArrayNoRepeatFrom(OFFER_FEATURE),
       description: 'Описание предложения',
       photos: getUrlOfferPhotos(getRandomIntInclusive(1, 5))
     };
@@ -97,12 +95,9 @@ var getAdList = function (quantity) {
 // Функция создания DOM элемента - указаьель
 var renderPin = function (ad) {
   var pinElement = pinButtonTemplate.cloneNode(true);
-  // __Как их получить?
-  var widthPin = 50;
-  var heightPin = 70;
 
-  pinElement.style.left = ad.location.x - widthPin / 2 + 'px';
-  pinElement.style.top = ad.location.y - heightPin + 'px';
+  pinElement.style.left = ad.location.x - WIDTH_PIN / 2 + 'px';
+  pinElement.style.top = ad.location.y - HEIGHT_PIN + 'px';
   pinElement.querySelector('img').src = ad.author.avatar;
   pinElement.querySelector('img').alt = ad.offer.title;
 
@@ -110,16 +105,15 @@ var renderPin = function (ad) {
 };
 
 // Функция заплнения блока элементами - указатель
-var initPins = function () {
-  map.classList.remove('map--faded');
-
-  var adverts = getAdList(numberOfOffers);
-
+var drewPins = function () {
+  var adverts = getAdList(NUMBER_OF_OFFERS);
   var fragment = document.createDocumentFragment();
+
   for (var i = 0; i < adverts.length; i++) {
     fragment.appendChild(renderPin(adverts[i]));
   }
   mapPins.appendChild(fragment);
 };
 
-initPins();
+map.classList.remove('map--faded');
+drewPins();
