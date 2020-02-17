@@ -147,21 +147,16 @@ var renderCardOfAd = function (ad) {
 };
 // Функция заплнения блока элементами - указатель
 var drewPins = function () {
-  // var adverts = getAdList(NUMBER_OF_OFFERS);
-  // var cardOfAd = cardTemplate.cloneNode(true);
   var fragment = document.createDocumentFragment();
-
   for (var i = 0; i < adverts.length; i++) {
     fragment.appendChild(renderPin(adverts[i]));
   }
-  // fragment.appendChild(cardOfAd);
   fragment.appendChild(renderCardOfAd(adverts[0]));
   mapPins.appendChild(fragment);
 };
 // Функция заплнения блока элементами - указатель
 var drewCardOfAd = function () {
   var fragment = document.createDocumentFragment();
-
   fragment.appendChild(renderCardOfAd(adverts[0]));
   mapPins.appendChild(fragment);
 };
