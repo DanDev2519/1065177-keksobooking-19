@@ -1,18 +1,19 @@
 'use strict';
 
 var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
-var offerTypeMap = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalo: 'Бунгало'
-};
 var OFFER_CHECKIN = ['12:00', '13:00', '14:00'];
 var OFFER_CHECKOUT = ['12:00', '13:00', '14:00'];
 var OFFER_FEATURE = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var NUMBER_OF_OFFERS = 8;
 var WIDTH_PIN = 50;
 var HEIGHT_PIN = 70;
+
+var offerTypeMap = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalo: 'Бунгало'
+};
 
 var map = document.querySelector('.map');
 var mapPins = map.querySelector('.map__pins');
@@ -153,11 +154,9 @@ var drewPins = function (adverts) {
   fragment.appendChild(renderCardOfAd(adverts[0]));
   mapPins.appendChild(fragment);
 };
-// Функция заплнения блока элементами - указатель
+// Функция заплнения блока элементами - карточка объявления
 var drewCardOfAd = function (adverts) {
-  var fragment = document.createDocumentFragment();
-  fragment.appendChild(renderCardOfAd(adverts[0]));
-  mapPins.appendChild(fragment);
+  mapPins.appendChild(renderCardOfAd(adverts[0]));
 };
 // Функция инициализации
 var init = function () {
