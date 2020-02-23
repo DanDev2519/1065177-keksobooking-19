@@ -7,12 +7,20 @@ var OFFER_FEATURE = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'con
 var NUMBER_OF_OFFERS = 8;
 var WIDTH_PIN = 50;
 var HEIGHT_PIN = 70;
+var WIDTH_MAIN_PIN = 65;
+var HEIGHT_MAIN_PIN = 65;
+var VERTICAL_OFFSET_MAIN_PIN = 16;
+
 
 var offerTypeMap = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом',
   bungalo: 'Бунгало'
+};
+var KeyCode = {
+  ESC_CODE: 27,
+  ENTER_CODE: 13
 };
 
 var map = document.querySelector('.map');
@@ -23,6 +31,12 @@ var pinButtonTemplate = document.querySelector('#pin')
 var cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.map__card');
+var adForm = document.querySelector('.ad-form');
+var mapFilters = document.querySelector('.map__filters');
+var userMainPin = map.querySelector('.map__pin--main');
+var userAddressInput = adForm.querySelector('#address');
+var userRoomNumberSelect = adForm.querySelector('#room_number');
+var userСapacitySelect = adForm.querySelector('#capacity');
 
 // Функция создания строки из числа с ведущими нулями
 var getLeadingZeros = function (num, size) {
@@ -158,12 +172,127 @@ var drewPins = function (adverts) {
 var drewCardOfAd = function (adverts) {
   mapPins.appendChild(renderCardOfAd(adverts[0]));
 };
-// Функция инициализации
-var init = function () {
+// Функция добавления атрибута disabled дочерним элементам
+var setAttributeDisabledChildren = function (parent) {
+  for (var i = 0; i < parent.children.length; i++) {
+    parent.children[i].setAttribute('disabled', 'disabled');
+  }
+};
+// Функция удаления атрибута disabled дочерним элементам
+var removeAttributeDisabledChildren = function (parent) {
+  for (var i = 0; i < parent.children.length; i++) {
+    parent.children[i].removeAttribute('disabled', 'disabled');
+  }
+};
+// Функция активации страницы
+var activation = function () {
   var adverts = getAdList(NUMBER_OF_OFFERS);
   map.classList.remove('map--faded');
   drewPins(adverts);
   drewCardOfAd(adverts);
+  removeAttributeDisabledChildren(adForm);
+  removeAttributeDisabledChildren(mapFilters);
+  userMainPin.removeEventListener('mousedown', onMainPinMousePressInit);
+  userMainPin.removeEventListener('keydown', onMainPinEnterPressInit);
+  // __Как этот кусок можно оптимизировать? А то повтор с функицей init()
+  var userMainPinX = Math.round(parseInt(userMainPin.style.left.slice(0, -2), 10) + WIDTH_MAIN_PIN / 2);
+  var userMainPinY = Math.round(parseInt(userMainPin.style.top.slice(0, -2), 10) + HEIGHT_MAIN_PIN + VERTICAL_OFFSET_MAIN_PIN);
+  userAddressInput.value = userMainPinX + ', ' + userMainPinY;
 };
+// Функция инициализации
+var init = function () {
+  setAttributeDisabledChildren(adForm);
+  setAttributeDisabledChildren(mapFilters);
+  // __можно px вырезать с помощью регулярных выражений, но на скору руку не разобрался как,
+  // __поэтому slice
+  var userMainPinX = Math.round(parseInt(userMainPin.style.left.slice(0, -2), 10) + WIDTH_MAIN_PIN / 2);
+  var userMainPinY = Math.round(parseInt(userMainPin.style.top.slice(0, -2), 10) + HEIGHT_MAIN_PIN / 2);
+  userAddressInput.value = userMainPinX + ', ' + userMainPinY;
+};
+// Функция события нажатия ЛКМ по mainPin при инициализации
+var onMainPinMousePressInit = function (evt) {
+  if (evt.button === 0) {
+    activation();
+  }
+};
+// Функция события нажатия Enter по mainPin при инициализации
+var onMainPinEnterPressInit = function (evt) {
+  if (evt.keyCode === KeyCode.ENTER_CODE) {
+    activation();
+  }
+};
+
+userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
+
+userMainPin.addEventListener('keydown', onMainPinEnterPressInit);
+// __при пеализации непростой валидации метод setCustomValidity не срабатывает - не понял почему
+// __alert работает - это для проверки кода
+userRoomNumberSelect.addEventListener('input', function (evt) {
+  var target = evt.target;
+  var guest = userСapacitySelect.value;
+  if (guest === '1') {
+    if (target.value === '1' || target.value === '2' || target.value === '3') {
+      target.setCustomValidity('');
+    } else {
+      target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат 1, 2 или 3');
+      alert('Для выбранного количества мест доступно только колическво комнат 1, 2 или 3');
+    }
+  } else if (guest === '2') {
+    if (target.value === '2' || target.value === '3') {
+      target.setCustomValidity('');
+    } else {
+      target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат 2 или 3');
+      alert('Для выбранного количества мест доступно только колическво комнат 2 или 3');
+    }
+  } else if (guest === '3') {
+    if (target.value === '3') {
+      target.setCustomValidity('');
+    } else {
+      target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат  3');
+      alert('Для выбранного количества мест доступно только колическво комнат 3');
+    }
+  } else if (guest === '0') {
+    if (target.value === '100') {
+      target.setCustomValidity('');
+    } else {
+      target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат 100');
+      alert('Для выбранного количества мест доступно только колическво комнат 100');
+    }
+  }
+});
+
+userСapacitySelect.addEventListener('input', function (evt) {
+  var target = evt.target;
+  var room = userRoomNumberSelect.value;
+  if (room === '1') {
+    if (target.value !== '1') {
+      target.setCustomValidity('Для выбранного количества комнат доступно только колическво мест 1');
+      alert('Для выбранного количества комнат доступно только колическво мест 1');
+    } else {
+      target.setCustomValidity('');
+    }
+  } else if (room === '2') {
+    if (target.value !== '1' && target.value !== '2') {
+      target.setCustomValidity('Для выбранного количества комнат доступно только колическво мест 1 или 2');
+      alert('Для выбранного количества комнат доступно только колическво мест 1 или 2');
+    } else {
+      target.setCustomValidity('');
+    }
+  } else if (room === '3') {
+    if (target.value !== '1' && target.value !== '2' && target.value !== '3') {
+      target.setCustomValidity('Для выбранного количества комнат доступно только колическво мест 1, 2 или 3');
+      alert('Для выбранного количества комнат доступно только колическво мест 1, 2 или 3');
+    } else {
+      target.setCustomValidity('');
+    }
+  } else if (room === '100') {
+    if (target.value !== '0') {
+      target.setCustomValidity('Для выбранного количества комнат доступно только \'не для гостей\'');
+      alert('Для выбранного количества комнат доступно только \'не для гостей\'');
+    } else {
+      target.setCustomValidity('');
+    }
+  }
+});
 
 init();
