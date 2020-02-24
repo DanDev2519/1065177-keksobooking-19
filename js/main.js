@@ -7,8 +7,6 @@ var OFFER_FEATURE = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'con
 var NUMBER_OF_OFFERS = 8;
 var WIDTH_PIN = 50;
 var HEIGHT_PIN = 70;
-var WIDTH_MAIN_PIN = 65;
-var HEIGHT_MAIN_PIN = 65;
 var VERTICAL_OFFSET_MAIN_PIN = 16;
 
 
@@ -37,6 +35,7 @@ var userMainPin = map.querySelector('.map__pin--main');
 var userAddressInput = adForm.querySelector('#address');
 var userRoomNumberSelect = adForm.querySelector('#room_number');
 var userСapacitySelect = adForm.querySelector('#capacity');
+var adFormSubmitBtn = adForm.querySelector('.ad-form__submit');
 
 // Функция создания строки из числа с ведущими нулями
 var getLeadingZeros = function (num, size) {
@@ -189,10 +188,19 @@ var onMainPinMouseUp = function (evt) {
   var userMainPinY = Math.round(evt.pageY + mapPins.getBoundingClientRect().top + window.scrollY);
   userAddressInput.value = userMainPinX + ', ' + userMainPinY;
 };
+// Функция задания начального адреса или по нажанию Ener
+var setInitUserAdressInput = function (withTail) {
+  var userMainPinProperties = userMainPin.getBoundingClientRect();
+  var mapPinsProperties = mapPins.getBoundingClientRect();
+  var userMainPinX = Math.round(userMainPinProperties.left - mapPinsProperties.left + userMainPinProperties.width / 2);
+  var userMainPinY = Math.round(userMainPinProperties.top + mapPinsProperties.top + 2 * window.scrollY + (withTail ? userMainPinProperties.height + VERTICAL_OFFSET_MAIN_PIN : userMainPinProperties.height / 2));
+  userAddressInput.value = userMainPinX + ', ' + userMainPinY;
+};
 // Функция активации страницы
 var activation = function () {
   var adverts = getAdList(NUMBER_OF_OFFERS);
   map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
   drewPins(adverts);
   drewCardOfAd(adverts);
   removeAttributeDisabledChildren(adForm);
@@ -204,9 +212,7 @@ var activation = function () {
 var init = function () {
   setAttributeDisabledChildren(adForm);
   setAttributeDisabledChildren(mapFilters);
-  var userMainPinX = Math.round(parseInt(userMainPin.style.left.slice(0, -2), 10) + WIDTH_MAIN_PIN / 2);
-  var userMainPinY = Math.round(parseInt(userMainPin.style.top.slice(0, -2), 10) + HEIGHT_MAIN_PIN / 2);
-  userAddressInput.value = userMainPinX + ', ' + userMainPinY;
+  setInitUserAdressInput(false);
 };
 // Функция события нажатия ЛКМ по mainPin при инициализации
 var onMainPinMousePressInit = function (evt) {
@@ -218,9 +224,7 @@ var onMainPinMousePressInit = function (evt) {
 var onMainPinEnterPressInit = function (evt) {
   if (evt.keyCode === KeyCode.ENTER) {
     activation();
-    var userMainPinX = Math.round(parseInt(userMainPin.style.left.slice(0, -2), 10) + WIDTH_MAIN_PIN / 2);
-    var userMainPinY = Math.round(parseInt(userMainPin.style.top.slice(0, -2), 10) + HEIGHT_MAIN_PIN + VERTICAL_OFFSET_MAIN_PIN);
-    userAddressInput.value = userMainPinX + ', ' + userMainPinY;
+    setInitUserAdressInput(true);
   }
 };
 
@@ -230,91 +234,13 @@ userMainPin.addEventListener('keydown', onMainPinEnterPressInit);
 
 userMainPin.addEventListener('mouseup', onMainPinMouseUp);
 
-var adFormSubmitBtn = adForm.querySelector('.ad-form__submit');
-
-adForm.addEventListener('submit', function (evt) {
-  var condition1 = userСapacitySelect.value === '1' && userRoomNumberSelect.value === '1';
-  var condition2 = (userСapacitySelect.value === '1' || userСapacitySelect.value === '2') && userRoomNumberSelect.value === '2';
-  var condition3 = (userСapacitySelect.value === '1' || userСapacitySelect.value === '2' || userСapacitySelect.value === '3') && userRoomNumberSelect.value === '3';
-  var condition4 = userСapacitySelect.value === '0' && userRoomNumberSelect.value === '100';
-
-  if (!condition1 || !condition2 || !condition3 || !condition4) {
-    adFormSubmitBtn.setCustomValidity('Количество комнат не соответствует количеству гостей');
-    evt.preventDefault();
+adFormSubmitBtn.addEventListener('click', function (evt) {
+  var target = evt.target;
+  if (+userRoomNumberSelect.value < +userСapacitySelect.value || userСapacitySelect.value === '0' && userRoomNumberSelect.value !== '100') {
+    target.setCustomValidity('Количество комнат не соответствует количеству гостей');
   } else {
     adFormSubmitBtn.setCustomValidity('');
   }
 });
-
-// __при пеализации непростой валидации метод setCustomValidity не срабатывает - не понял почему
-// __alert работает - это для проверки кода
-// userRoomNumberSelect.addEventListener('input', function (evt) {
-//   var target = evt.target;
-//   var room = userRoomNumberSelect.value;
-//   var guest = userСapacitySelect.value;
-//   if (guest === '1') {
-//     if (target.value === '1' || target.value === '2' || target.value === '3') {
-//       target.setCustomValidity('');
-//     } else {
-//       target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат 1, 2 или 3');
-//       alert('Для выбранного количества мест доступно только колическво комнат 1, 2 или 3');
-//     }
-//   } else if (guest === '2') {
-//     if (target.value === '2' || target.value === '3') {
-//       target.setCustomValidity('');
-//     } else {
-//       target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат 2 или 3');
-//       alert('Для выбранного количества мест доступно только колическво комнат 2 или 3');
-//     }
-//   } else if (guest === '3') {
-//     if (target.value === '3') {
-//       target.setCustomValidity('');
-//     } else {
-//       target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат  3');
-//       alert('Для выбранного количества мест доступно только колическво комнат 3');
-//     }
-//   } else if (guest === '0') {
-//     if (target.value === '100') {
-//       target.setCustomValidity('');
-//     } else {
-//       target.setCustomValidity('Для выбранного количества мест доступно только колическво комнат 100');
-//       alert('Для выбранного количества мест доступно только колическво комнат 100');
-//     }
-//   }
-// });
-
-// userСapacitySelect.addEventListener('input', function (evt) {
-//   var target = evt.target;
-//   var room = userRoomNumberSelect.value;
-//   if (room === '1') {
-//     if (target.value !== '1') {
-//       target.setCustomValidity('Для выбранного количества комнат доступно только колическво мест 1');
-//       alert('Для выбранного количества комнат доступно только колическво мест 1');
-//     } else {
-//       target.setCustomValidity('');
-//     }
-//   } else if (room === '2') {
-//     if (target.value !== '1' && target.value !== '2') {
-//       target.setCustomValidity('Для выбранного количества комнат доступно только колическво мест 1 или 2');
-//       alert('Для выбранного количества комнат доступно только колическво мест 1 или 2');
-//     } else {
-//       target.setCustomValidity('');
-//     }
-//   } else if (room === '3') {
-//     if (target.value !== '1' && target.value !== '2' && target.value !== '3') {
-//       target.setCustomValidity('Для выбранного количества комнат доступно только колическво мест 1, 2 или 3');
-//       alert('Для выбранного количества комнат доступно только колическво мест 1, 2 или 3');
-//     } else {
-//       target.setCustomValidity('');
-//     }
-//   } else if (room === '100') {
-//     if (target.value !== '0') {
-//       target.setCustomValidity('Для выбранного количества комнат доступно только \'не для гостей\'');
-//       alert('Для выбранного количества комнат доступно только \'не для гостей\'');
-//     } else {
-//       target.setCustomValidity('');
-//     }
-//   }
-// });
 
 init();
