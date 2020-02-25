@@ -235,11 +235,10 @@ userMainPin.addEventListener('keydown', onMainPinEnterPressInit);
 userMainPin.addEventListener('mouseup', onMainPinMouseUp);
 
 adFormSubmitBtn.addEventListener('click', function (evt) {
-  var target = evt.target;
   if (+userRoomNumberSelect.value < +userСapacitySelect.value || userСapacitySelect.value === '0' && userRoomNumberSelect.value !== '100') {
-    target.setCustomValidity('Количество комнат не соответствует количеству гостей');
+    userСapacitySelect.setCustomValidity('Количество комнат не соответствует количеству гостей');
   } else {
-    adFormSubmitBtn.setCustomValidity('');
+    userСapacitySelect.setCustomValidity('');
   }
 });
 
