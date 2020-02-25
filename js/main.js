@@ -234,7 +234,7 @@ userMainPin.addEventListener('keydown', onMainPinEnterPressInit);
 
 userMainPin.addEventListener('mouseup', onMainPinMouseUp);
 
-adFormSubmitBtn.addEventListener('click', function (evt) {
+adFormSubmitBtn.addEventListener('click', function () {
   if (+userRoomNumberSelect.value < +userСapacitySelect.value || userСapacitySelect.value === '0' && userRoomNumberSelect.value !== '100') {
     userСapacitySelect.setCustomValidity('Количество комнат не соответствует количеству гостей');
   } else {
