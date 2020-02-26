@@ -20,6 +20,6 @@
 
   window.pin = {
     // window.pin.
-    renderPin: renderPin
+    render: renderPin
   };
 })();

@@ -1,7 +1,6 @@
 'use strict';
 
-(function () {
-
+window.addEventListener('load', function () {
   var adForm = document.querySelector('.ad-form');
   var mapFilters = document.querySelector('.map__filters');
 
@@ -11,6 +10,4 @@
     window.utils.setAttributeDisabledChildren(mapFilters);
     window.form.setInitUserAdressInput(false);
   })();
-
-})();
-
+});

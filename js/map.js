@@ -14,13 +14,13 @@
   var drewPins = function (adverts) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < adverts.length; i++) {
-      fragment.appendChild(window.pin.renderPin(adverts[i]));
+      fragment.appendChild(window.pin.render(adverts[i]));
     }
     mapPins.appendChild(fragment);
   };
   // Функция заплнения блока элементами - карточка объявления
   var drewCardOfAd = function (adverts) {
-    mapPins.appendChild(window.card.renderCardOfAd(adverts[0]));
+    mapPins.appendChild(window.card.renderOfAd(adverts[0]));
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
@@ -61,7 +61,4 @@
 
   userMainPin.addEventListener('mouseup', onMainPinMouseUp);
 
-  // window.map = {
-  //   // window.map.
-  // };
 })();

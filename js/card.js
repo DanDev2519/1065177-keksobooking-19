@@ -61,6 +61,6 @@
 
   window.card = {
     // window.card.
-    renderCardOfAd: renderCardOfAd
+    renderOfAd: renderCardOfAd
   };
 })();
