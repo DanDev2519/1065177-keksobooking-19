@@ -10,17 +10,34 @@
   var adForm = document.querySelector('.ad-form');
   var userAddressInput = adForm.querySelector('#address');
 
-  // Функция заплнения блока элементами - указатель
+  // Функция показывающая подробную информацию объявления по нажатию
+  var showCard = function (pin, advert) {
+    pin.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      drewCardOfAd(advert);
+    });
+    pin.addEventListener('keydouwn', function (evt) {
+      window.utils.isEnterEvent(evt, function () {
+        evt.preventDefault();
+        drewCardOfAd(advert);
+      });
+    });
+  };
+  // Функция заполнения блока элементами - указатель
   var drewPins = function (adverts) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < adverts.length; i++) {
-      fragment.appendChild(window.pin.render(adverts[i]));
+      var pin = window.pin.render(adverts[i]);
+      showCard(pin, adverts[i]);
+      fragment.appendChild(pin);
     }
     mapPins.appendChild(fragment);
   };
   // Функция заплнения блока элементами - карточка объявления
-  var drewCardOfAd = function (adverts) {
-    mapPins.appendChild(window.card.renderOfAd(adverts[0]));
+  var drewCardOfAd = function (advert) {
+    if (!mapPins.querySelector('.map__card')) {
+      mapPins.appendChild(window.card.renderOfAd(advert));
+    }
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
@@ -28,7 +45,6 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     drewPins(adverts);
-    drewCardOfAd(adverts);
     window.utils.removeAttributeDisabledChildren(adForm);
     window.utils.removeAttributeDisabledChildren(mapFilters);
     userMainPin.removeEventListener('mousedown', onMainPinMousePressInit);
