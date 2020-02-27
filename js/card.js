@@ -42,6 +42,28 @@
       }
     }
   };
+  // Функция, описывающая взаимодействие пользователя с карточкой объявления
+  var userCardActions = function (card) {
+    var closeButton = card.querySelector('.popup__close');
+
+    var closePopup = function () {
+      if (card.parentNode) {
+        card.parentNode.removeChild(card);
+      }
+      document.removeEventListener('keydown', onPupopEscPress);
+    };
+    var onPupopEscPress = function (evt) {
+      window.utils.isEscEvent(evt, function () {
+        closePopup();
+      });
+    };
+
+    closeButton.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      closePopup();
+    });
+    document.addEventListener('keydown', onPupopEscPress);
+  };
   // Функция создания DOM элемента - карточка объявления
   var renderCardOfAd = function (ad) {
     var card = cardTemplate.cloneNode(true);
@@ -56,6 +78,9 @@
     card.querySelector('.popup__description').textContent = ad.offer.description;
     renderCardPhotos(card, ad);
     card.querySelector('.popup__avatar').src = ad.author.avatar;
+
+    userCardActions(card);
+
     return card;
   };
 
