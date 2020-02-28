@@ -16,12 +16,6 @@
       evt.preventDefault();
       drewCardOfAd(advert);
     });
-    pin.addEventListener('keydouwn', function (evt) {
-      window.utils.isEnterEvent(evt, function () {
-        evt.preventDefault();
-        drewCardOfAd(advert);
-      });
-    });
   };
   // Функция заполнения блока элементами - указатель
   var drewPins = function (adverts) {
