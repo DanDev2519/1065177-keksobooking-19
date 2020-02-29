@@ -43,6 +43,7 @@
     window.utils.removeAttributeDisabledChildren(mapFilters);
     userMainPin.removeEventListener('mousedown', onMainPinMousePressInit);
     userMainPin.removeEventListener('keydown', onMainPinEnterPressInit);
+    userMainPin.addEventListener('mousedown', onMainPinMousDown);
   };
 
   // Функция события нажатия ЛКМ по mainPin при инициализации
@@ -51,8 +52,6 @@
       evt.preventDefault();
       activation();
       onMainPinMousDown(evt);
-
-      userMainPin.addEventListener('mousedown', onMainPinMousDown);
     }
   };
   // Функция события нажатия Enter по mainPin при инициализации
