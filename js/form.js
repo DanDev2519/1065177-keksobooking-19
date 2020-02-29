@@ -16,6 +16,13 @@
   var userSelectTimeIn = adForm.querySelector('#timein');
   var userSelectTimeOut = adForm.querySelector('#timeout');
 
+  var flatPrices = {
+    'bungalo': 0,
+    'flat': 1000,
+    'house': 5000,
+    'palace': 10000
+  };
+
   // Функция задания начального адреса или по нажанию Ener
   var setInitUserAdressInput = function (withTail) {
     var userMainPinProperties = userMainPin.getBoundingClientRect();
@@ -26,23 +33,8 @@
   };
   // Функция валидации Типа жилья и Цены за ночь
   var onTypeBoomSelectChange = function () {
-    var typeValue = userTypeRoomSelect.value;
-    if (typeValue === 'bungalo') {
-      userPriseNight.min = 0;
-      userPriseNight.placeholder = '0';
-    } else if (typeValue === 'flat') {
-      userPriseNight.min = 1000;
-      userPriseNight.placeholder = '1000';
-    } else if (typeValue === 'house') {
-      userPriseNight.min = 5000;
-      userPriseNight.placeholder = '5000';
-    } else if (typeValue === 'palace') {
-      userPriseNight.min = 10000;
-      userPriseNight.placeholder = '10000';
-    } else {
-      userPriseNight.min = 0;
-      userPriseNight.placeholder = '0';
-    }
+    userPriseNight.min = flatPrices[userTypeRoomSelect.value];
+    userPriseNight.placeholder = flatPrices[userTypeRoomSelect.value];
   };
   // Функция синхронизации полей времени заезда и выезда
   var onTimeinSelectChange = function () {
