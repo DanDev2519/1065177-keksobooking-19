@@ -7,11 +7,9 @@
 
   // Функция инициализации
   window.addEventListener('load', function () {
-  // (function () {
     window.utils.setAttributeDisabledChildren(adForm);
     window.utils.setAttributeDisabledChildren(mapFilters);
     window.form.setInitUserAdressInput(false);
-  // })();
   });
 
 })();
