@@ -2,13 +2,13 @@
 
 (function () {
   var NUMBER_OF_OFFERS = 8;
+  var VERTICAL_OFFSET_MAIN_PIN = 16;
 
   var map = document.querySelector('.map');
   var mapFilters = document.querySelector('.map__filters');
   var mapPins = map.querySelector('.map__pins');
   var userMainPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
-  var userAddressInput = adForm.querySelector('#address');
 
   // Функция показывающая подробную информацию объявления по нажатию
   var showCard = function (pin, advert) {
@@ -48,7 +48,11 @@
   // Функция события нажатия ЛКМ по mainPin при инициализации
   var onMainPinMousePressInit = function (evt) {
     if (evt.button === 0) {
+      evt.preventDefault();
       activation();
+      onMainPinMousDown(evt);
+
+      userMainPin.addEventListener('mousedown', onMainPinMousDown);
     }
   };
   // Функция события нажатия Enter по mainPin при инициализации
@@ -58,17 +62,45 @@
       window.form.setInitUserAdressInput(true);
     });
   };
-  // Функция заания адреса по отпусканию мыши с main pin
-  var onMainPinMouseUp = function (evt) {
-    var userMainPinX = Math.round(evt.pageX - mapPins.getBoundingClientRect().left);
-    var userMainPinY = Math.round(evt.pageY + mapPins.getBoundingClientRect().top + window.scrollY);
-    userAddressInput.value = userMainPinX + ', ' + userMainPinY;
+  // Функция перемещения mainPin по нажатию
+  var onMainPinMousDown = function (evt) {
+    var userMainPinPressX = Math.round(evt.pageX - userMainPin.getBoundingClientRect().left);
+    var userMainPinPressY = Math.round(evt.pageY - userMainPin.getBoundingClientRect().top - window.scrollY);
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var mapPinsProperties = mapPins.getBoundingClientRect();
+      var userMainPinProperties = userMainPin.getBoundingClientRect();
+      var maxX = mapPinsProperties.right - userMainPinProperties.width / 2;
+      var minX = mapPinsProperties.left - userMainPinProperties.width / 2;
+      var maxY = 630 - (userMainPinProperties.height + VERTICAL_OFFSET_MAIN_PIN);
+      var minY = 130 - (userMainPinProperties.height + VERTICAL_OFFSET_MAIN_PIN);
+
+      var shift = {
+        x: Math.max(minX, Math.min((moveEvt.pageX - userMainPinPressX), maxX)) - mapPinsProperties.left,
+        y: Math.max(minY, Math.min((moveEvt.pageY - userMainPinPressY), maxY)) - mapPinsProperties.top - window.scrollY
+      };
+
+      userMainPin.style.top = shift.y + 'px';
+      userMainPin.style.left = shift.x + 'px';
+
+      window.form.setInitUserAdressInput(true);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      window.form.setInitUserAdressInput(true);
+
+      document.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
   };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
 
   userMainPin.addEventListener('keydown', onMainPinEnterPressInit);
-
-  userMainPin.addEventListener('mouseup', onMainPinMouseUp);
 
 })();
