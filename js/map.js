@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var NUMBER_OF_OFFERS = 8;
   var VERTICAL_OFFSET_MAIN_PIN = 16;
 
   var map = document.querySelector('.map');
@@ -35,10 +34,10 @@
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
-    var adverts = window.data.getAdList(NUMBER_OF_OFFERS);
+    window.load.getData(onSuccessLoad, window.load.onError);
+
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    drewPins(adverts);
     window.utils.removeAttributeDisabledChildren(adForm);
     window.utils.removeAttributeDisabledChildren(mapFilters);
     userMainPin.removeEventListener('mousedown', onMainPinMousePressInit);
@@ -97,6 +96,21 @@
     document.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
   };
+  // Функции успешной и неуспешной загрузки данных с сервера
+  var onSuccessLoad = function (pins) {
+    drewPins(pins);
+  };
+  // var onErrorLoad = function (errorMessage) {
+  //   var node = document.createElement('div');
+  //   node.style = 'z-index: 100; margin: 0 auto; text-align: center; color: yellow; background-color: tomato;';
+  //   node.style.position = 'fixed';
+  //   node.style.left = 0;
+  //   node.style.right = 0;
+  //   node.style.fontSize = '30px';
+
+  //   node.textContent = errorMessage;
+  //   document.body.insertAdjacentElement('afterbegin', node);
+  // };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
 
