@@ -2,7 +2,7 @@
 
 (function () {
   var TIMEOUT_IN_MS = 10000;
-  var URL = 'https://js.dump.academy/keksobooking/data';
+  var URL = 'https://js.dump.academy/keksobooking/data1';
   var StatusCode = {
     OK: 200,
     BAD_REQUEST: 400,

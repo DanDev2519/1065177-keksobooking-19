@@ -34,7 +34,7 @@
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
-    window.load.getData(onSuccessLoad, window.load.onError);
+    window.load.getData(onSuccessLoad, onErrorLoad);
 
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -100,17 +100,9 @@
   var onSuccessLoad = function (pins) {
     drewPins(pins);
   };
-  // var onErrorLoad = function (errorMessage) {
-  //   var node = document.createElement('div');
-  //   node.style = 'z-index: 100; margin: 0 auto; text-align: center; color: yellow; background-color: tomato;';
-  //   node.style.position = 'fixed';
-  //   node.style.left = 0;
-  //   node.style.right = 0;
-  //   node.style.fontSize = '30px';
-
-  //   node.textContent = errorMessage;
-  //   document.body.insertAdjacentElement('afterbegin', node);
-  // };
+  var onErrorLoad = function (errorMessage) {
+    window.popup.error(errorMessage);
+  };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
 
