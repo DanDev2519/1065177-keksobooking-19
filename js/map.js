@@ -108,4 +108,10 @@
 
   userMainPin.addEventListener('keydown', onMainPinEnterPressInit);
 
+  window.map = {
+    // window.map.
+    onSuccessLoad: onSuccessLoad,
+    onErrorLoad: onErrorLoad
+  };
+
 })();

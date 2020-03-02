@@ -12,27 +12,36 @@
 
     var removeError = function () {
       mein.removeChild(errorPopup);
-      errorButton.removeEventListener('click', removeError);
+      errorButton.removeEventListener('click', onErrorButtonClick);
       document.removeEventListener('keydown', onPopupEscPress);
-      document.removeEventListener('click', removeError);
+      errorPopup.removeEventListener('click', onPopupClick);
+    };
+    var onErrorButtonClick = function () {
+      removeError();
+      window.load.getData(window.map.onSuccessLoad, window.map.onErrorLoad);
     };
     var onPopupEscPress = function (evt) {
       window.utils.isEscEvent(evt, function () {
         removeError();
       });
     };
+    var onPopupClick = function (evt) {
+      if (evt.target === evt.currentTarget) {
+        removeError();
+      }
+    };
 
     errorPopup.querySelector('.error__message').textContent = errorMessage;
     mein.appendChild(errorPopup);
 
-    errorButton.addEventListener('click', removeError);
+    errorButton.addEventListener('click', onErrorButtonClick);
     document.addEventListener('keydown', onPopupEscPress);
-    // document.addEventListener('click', removeError);
+    errorPopup.addEventListener('click', onPopupClick);
   };
 
   window.popup = {
     // window.popup.
-    error: error,
+    error: error
   };
 
 })();
