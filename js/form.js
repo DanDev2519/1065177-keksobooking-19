@@ -2,6 +2,7 @@
 
 (function () {
   var VERTICAL_OFFSET_MAIN_PIN = 16;
+  var ERROR_LOAD_MESSAGE = 'Ошибка загрузки объявления';
 
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
@@ -16,7 +17,7 @@
   var userSelectTimeIn = adForm.querySelector('#timein');
   var userSelectTimeOut = adForm.querySelector('#timeout');
 
-  var flatPrices = {
+  var FlatPrices = {
     'bungalo': 0,
     'flat': 1000,
     'house': 5000,
@@ -33,8 +34,8 @@
   };
   // Функция валидации Типа жилья и Цены за ночь
   var onTypeBoomSelectChange = function () {
-    userPriseNight.min = flatPrices[userTypeRoomSelect.value];
-    userPriseNight.placeholder = flatPrices[userTypeRoomSelect.value];
+    userPriseNight.min = FlatPrices[userTypeRoomSelect.value];
+    userPriseNight.placeholder = FlatPrices[userTypeRoomSelect.value];
   };
   // Функция синхронизации полей времени заезда и выезда
   var onTimeinSelectChange = function () {
@@ -42,6 +43,25 @@
   };
   var onTimeoutSelectChange = function () {
     userSelectTimeIn.value = userSelectTimeOut.value;
+  };
+  // Функция вызывающая соответствующее действие после попытки отпраитвить форму
+  var onPostDataAction = function (response) {
+    if (response) {
+      window.map.reset();
+      onResetBtnAction();
+      adForm.classList.add('ad-form--disabled');
+      window.init.begin();
+      window.popup.success();
+    } else {
+      window.popup.error(ERROR_LOAD_MESSAGE, 'post-data');
+    }
+  };
+  // Функция сброса формы
+  var onResetBtnAction = function (evt) {
+    evt.preventDefault();
+    var address = userAddressInput.value;
+    document.querySelector('.ad-form').reset();
+    userAddressInput.value = address;
   };
 
   // Обработчик изменения поля выбора Типа жилья
@@ -57,9 +77,17 @@
       userСapacitySelect.setCustomValidity('');
     }
   });
+  // Обработчик события отправки формы
+  adForm.addEventListener('submit', function (evt) {
+    window.upload.postData(new FormData(adForm), onPostDataAction);
+    evt.preventDefault();
+  });
+  // Обработчик события сброса формы
+  adForm.addEventListener('reset', onResetBtnAction);
 
   window.form = {
     // window.form.
     setInitUserAdressInput: setInitUserAdressInput,
+    onPostDataAction: onPostDataAction,
   };
 })();

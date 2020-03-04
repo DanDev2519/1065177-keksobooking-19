@@ -26,6 +26,13 @@
     }
     mapPins.appendChild(fragment);
   };
+  var removePins = function () {
+    var pins = document.querySelectorAll('button[type="button"][class="map__pin"]');
+    for (var i = pins.length - 1; i >= 0; i--) {
+      var child = pins[i];
+      child.parentElement.removeChild(child);
+    }
+  };
   // Функция заплнения блока элементами - карточка объявления
   var drewCardOfAd = function (advert) {
     if (!mapPins.querySelector('.map__card')) {
@@ -44,7 +51,15 @@
     userMainPin.removeEventListener('keydown', onMainPinEnterPressInit);
     userMainPin.addEventListener('mousedown', onMainPinMousDown);
   };
-
+  // Функция сброса карты
+  var resetMap = function () {
+    userMainPin.style = 'left: 570px; top: 375px;';
+    map.classList.add('map--faded');
+    removePins();
+    userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
+    userMainPin.addEventListener('keydown', onMainPinEnterPressInit);
+    userMainPin.removeEventListener('mousedown', onMainPinMousDown);
+  };
   // Функция события нажатия ЛКМ по mainPin при инициализации
   var onMainPinMousePressInit = function (evt) {
     if (evt.button === 0) {
@@ -101,7 +116,7 @@
     drewPins(pins);
   };
   var onErrorLoad = function (errorMessage) {
-    window.popup.error(errorMessage);
+    window.popup.error(errorMessage, 'get-data');
   };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
@@ -111,7 +126,8 @@
   window.map = {
     // window.map.
     onSuccessLoad: onSuccessLoad,
-    onErrorLoad: onErrorLoad
+    onErrorLoad: onErrorLoad,
+    reset: resetMap
   };
 
 })();
