@@ -16,6 +16,7 @@
   var adFormSubmitBtn = adForm.querySelector('.ad-form__submit');
   var userSelectTimeIn = adForm.querySelector('#timein');
   var userSelectTimeOut = adForm.querySelector('#timeout');
+  var resetFormBtn = adForm.querySelector('.ad-form__reset');
 
   var FlatPrices = {
     'bungalo': 0,
@@ -45,23 +46,22 @@
     userSelectTimeIn.value = userSelectTimeOut.value;
   };
   // Функция вызывающая соответствующее действие после попытки отпраитвить форму
-  var onPostDataAction = function (response) {
-    if (response) {
-      window.map.reset();
-      onResetBtnAction();
-      adForm.classList.add('ad-form--disabled');
-      window.init.begin();
-      window.popup.success();
-    } else {
-      window.popup.error(ERROR_LOAD_MESSAGE, 'post-data');
-    }
+  var onPostDataAction = function () {
+    onResetBtnAction();
+    window.popup.success();
+  };
+  var onErrorPostData = function () {
+    window.popup.error(ERROR_LOAD_MESSAGE, function () {
+      window.backend.exchangeServer(onPostDataAction, onErrorPostData, new FormData(adForm));
+    });
   };
   // Функция сброса формы
-  var onResetBtnAction = function (evt) {
-    evt.preventDefault();
-    var address = userAddressInput.value;
-    document.querySelector('.ad-form').reset();
-    userAddressInput.value = address;
+  var onResetBtnAction = function () {
+    // evt.preventDefault();
+    adForm.reset();
+    window.map.reset();
+    adForm.classList.add('ad-form--disabled');
+    window.init.begin();
   };
 
   // Обработчик изменения поля выбора Типа жилья
@@ -79,11 +79,14 @@
   });
   // Обработчик события отправки формы
   adForm.addEventListener('submit', function (evt) {
-    window.upload.postData(new FormData(adForm), onPostDataAction);
+    // window.upload.postData(new FormData(adForm), onPostDataAction);
+    window.backend.exchangeServer(onPostDataAction, onErrorPostData, new FormData(adForm));
     evt.preventDefault();
   });
   // Обработчик события сброса формы
-  adForm.addEventListener('reset', onResetBtnAction);
+  // adForm.addEventListener('reset', onResetBtnAction);
+  resetFormBtn.addEventListener('click', onResetBtnAction);
+
 
   window.form = {
     // window.form.

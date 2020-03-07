@@ -1,18 +1,17 @@
 'use strict';
 
 (function () {
+  var mein = document.querySelector('main');
   var errorTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
   var successTemplate = document.querySelector('#success')
   .content
   .querySelector('.success');
-  var adForm = document.querySelector('.ad-form');
 
   var error = function (errorMessage, btnAction) {
     var errorPopup = errorTemplate.cloneNode(true);
     var errorButton = errorPopup.querySelector('.error__button');
-    var mein = document.querySelector('main');
 
     var removeError = function () {
       mein.removeChild(errorPopup);
@@ -22,16 +21,7 @@
     };
     var onErrorButtonClick = function () {
       removeError();
-      // window.load.getData(window.map.onSuccessLoad, window.map.onErrorLoad);
-      switch (btnAction) {
-        case 'get-data':
-          window.load.getData(window.map.onSuccessLoad, window.map.onErrorLoad);
-          break;
-        case 'post-data':
-          // error = 'Неверный запрос';
-          window.upload.postData(new FormData(adForm), window.form.onPostDataAction);
-          break;
-      }
+      btnAction();
     };
     var onPopupEscPress = function (evt) {
       window.utils.isEscEvent(evt, function () {
@@ -54,7 +44,6 @@
 
   var success = function () {
     var successPopup = successTemplate.cloneNode(true);
-    var mein = document.querySelector('main');
 
     var removeSuccess = function () {
       mein.removeChild(successPopup);

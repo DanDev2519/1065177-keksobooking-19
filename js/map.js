@@ -27,11 +27,11 @@
     mapPins.appendChild(fragment);
   };
   var removePins = function () {
-    var pins = document.querySelectorAll('button[type="button"][class="map__pin"]');
-    for (var i = pins.length - 1; i >= 0; i--) {
-      var child = pins[i];
-      child.parentElement.removeChild(child);
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
     }
+
   };
   // Функция заплнения блока элементами - карточка объявления
   var drewCardOfAd = function (advert) {
@@ -41,7 +41,8 @@
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
-    window.load.getData(onSuccessLoad, onErrorLoad);
+    // window.load.getData(onSuccessLoad, onErrorLoad);
+    window.backend.exchangeServer(onSuccessLoad, onErrorLoad, null);
 
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -116,7 +117,10 @@
     drewPins(pins);
   };
   var onErrorLoad = function (errorMessage) {
-    window.popup.error(errorMessage, 'get-data');
+    // window.popup.error(errorMessage, 'get-data');
+    window.popup.error(errorMessage, function () {
+      window.backend.exchangeServer(onSuccessLoad, onErrorLoad, null);
+    });
   };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
