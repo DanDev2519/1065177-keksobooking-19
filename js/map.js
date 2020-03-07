@@ -41,8 +41,7 @@
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
-    // window.load.getData(onSuccessLoad, onErrorLoad);
-    window.backend.exchangeServer(onSuccessLoad, onErrorLoad, null);
+    window.backend.getFromServer(onSuccessLoad, onErrorLoad);
 
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -117,9 +116,8 @@
     drewPins(pins);
   };
   var onErrorLoad = function (errorMessage) {
-    // window.popup.error(errorMessage, 'get-data');
     window.popup.error(errorMessage, function () {
-      window.backend.exchangeServer(onSuccessLoad, onErrorLoad, null);
+      window.backend.getFromServer(onSuccessLoad, onErrorLoad);
     });
   };
 

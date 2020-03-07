@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var mein = document.querySelector('main');
+  var main = document.querySelector('main');
   var errorTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
@@ -26,7 +26,7 @@
     var errorButton = errorPopup.querySelector('.error__button');
 
     var removeError = function () {
-      mein.removeChild(errorPopup);
+      main.removeChild(errorPopup);
       errorButton.removeEventListener('click', onErrorButtonClick);
       document.removeEventListener('keydown', onPopupEscPress);
       errorPopup.removeEventListener('click', onPopupClick);
@@ -35,16 +35,6 @@
       removeError();
       btnAction();
     };
-    // var onPopupEscPress = function (evt) {
-    //   window.utils.isEscEvent(evt, function () {
-    //     removeError();
-    //   });
-    // };
-    // var onPopupClick = function (evt) {
-    //   if (evt.target === evt.currentTarget) {
-    //     removeError();
-    //   }
-    // };
     var onPopupEscPress = function (evt) {
       popupEscPress(evt, removeError);
     };
@@ -53,7 +43,7 @@
     };
 
     errorPopup.querySelector('.error__message').textContent = errorMessage;
-    mein.appendChild(errorPopup);
+    main.appendChild(errorPopup);
 
     errorButton.addEventListener('click', onErrorButtonClick);
     document.addEventListener('keydown', onPopupEscPress);
@@ -64,20 +54,10 @@
     var successPopup = successTemplate.cloneNode(true);
 
     var removeSuccess = function () {
-      mein.removeChild(successPopup);
+      main.removeChild(successPopup);
       document.removeEventListener('keydown', onPopupEscPress);
       successPopup.removeEventListener('click', onPopupClick);
     };
-    // var onPopupEscPress = function (evt) {
-    //   window.utils.isEscEvent(evt, function () {
-    //     removeSuccess();
-    //   });
-    // };
-    // var onPopupClick = function (evt) {
-    //   if (evt.target === evt.currentTarget) {
-    //     removeSuccess();
-    //   }
-    // };
     var onPopupEscPress = function (evt) {
       popupEscPress(evt, removeSuccess);
     };
@@ -85,7 +65,7 @@
       popupClick(evt, removeSuccess);
     };
 
-    mein.appendChild(successPopup);
+    main.appendChild(successPopup);
 
     document.addEventListener('keydown', onPopupEscPress);
     successPopup.addEventListener('click', onPopupClick);

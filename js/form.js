@@ -18,7 +18,7 @@
   var userSelectTimeOut = adForm.querySelector('#timeout');
   var resetFormBtn = adForm.querySelector('.ad-form__reset');
 
-  var FlatPrices = {
+  var flatPrices = {
     'bungalo': 0,
     'flat': 1000,
     'house': 5000,
@@ -35,8 +35,8 @@
   };
   // Функция валидации Типа жилья и Цены за ночь
   var onTypeBoomSelectChange = function () {
-    userPriseNight.min = FlatPrices[userTypeRoomSelect.value];
-    userPriseNight.placeholder = FlatPrices[userTypeRoomSelect.value];
+    userPriseNight.min = flatPrices[userTypeRoomSelect.value];
+    userPriseNight.placeholder = flatPrices[userTypeRoomSelect.value];
   };
   // Функция синхронизации полей времени заезда и выезда
   var onTimeinSelectChange = function () {
@@ -52,12 +52,11 @@
   };
   var onErrorPostData = function () {
     window.popup.error(ERROR_LOAD_MESSAGE, function () {
-      window.backend.exchangeServer(onPostDataAction, onErrorPostData, new FormData(adForm));
+      window.backend.postToServer(onPostDataAction, onErrorPostData, new FormData(adForm));
     });
   };
   // Функция сброса формы
   var onResetBtnAction = function () {
-    // evt.preventDefault();
     adForm.reset();
     window.map.reset();
     adForm.classList.add('ad-form--disabled');
@@ -79,12 +78,10 @@
   });
   // Обработчик события отправки формы
   adForm.addEventListener('submit', function (evt) {
-    // window.upload.postData(new FormData(adForm), onPostDataAction);
-    window.backend.exchangeServer(onPostDataAction, onErrorPostData, new FormData(adForm));
+    window.backend.postToServer(onPostDataAction, onErrorPostData, new FormData(adForm));
     evt.preventDefault();
   });
   // Обработчик события сброса формы
-  // adForm.addEventListener('reset', onResetBtnAction);
   resetFormBtn.addEventListener('click', onResetBtnAction);
 
 

@@ -14,7 +14,7 @@
     INTERNAL_SERVER_ERROR: 500
   };
 
-  var sendXhr = function (onSuccess, onError) {
+  var createXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -54,20 +54,21 @@
 
     return xhr;
   };
-
-  var exchangeServer = function (onSuccess, onError, data) {
-    var xhr = sendXhr(onSuccess, onError);
-    if (data) {
-      xhr.open('POST', Url.POST);
-      xhr.send(data);
-    } else {
-      xhr.open('GET', Url.GET);
-      xhr.send();
-    }
+  var postToServer = function (onSuccess, onError, data) {
+    var xhr = createXhr(onSuccess, onError);
+    xhr.open('POST', Url.POST);
+    xhr.send(data);
+  };
+  var getFromServer = function (onSuccess, onError) {
+    var xhr = createXhr(onSuccess, onError);
+    xhr.open('GET', Url.GET);
+    xhr.send();
   };
 
   window.backend = {
     // window.backend.
-    exchangeServer: exchangeServer
+    postToServer: postToServer,
+    getFromServer: getFromServer
+
   };
 })();
