@@ -2,7 +2,10 @@
 
 (function () {
   var TIMEOUT_IN_MS = 10000;
-  var URL = 'https://js.dump.academy/keksobooking/data1';
+  var Url = {
+    GET: 'https://js.dump.academy/keksobooking/data',
+    POST: 'https://js.dump.academy/keksobooking'
+  };
   var StatusCode = {
     OK: 200,
     BAD_REQUEST: 400,
@@ -11,7 +14,7 @@
     INTERNAL_SERVER_ERROR: 500
   };
 
-  var getData = function (onSuccess, onError) {
+  var createXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -49,25 +52,23 @@
 
     xhr.timeout = TIMEOUT_IN_MS;
 
-    xhr.open('GET', URL);
+    return xhr;
+  };
+  var postToServer = function (onSuccess, onError, data) {
+    var xhr = createXhr(onSuccess, onError);
+    xhr.open('POST', Url.POST);
+    xhr.send(data);
+  };
+  var getFromServer = function (onSuccess, onError) {
+    var xhr = createXhr(onSuccess, onError);
+    xhr.open('GET', Url.GET);
     xhr.send();
   };
 
-  var onErrorLoad = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; color: yellow; background-color: tomato;';
-    node.style.position = 'fixed';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
+  window.backend = {
+    // window.backend.
+    postToServer: postToServer,
+    getFromServer: getFromServer
 
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
-  window.load = {
-    // window.load.
-    getData: getData,
-    onError: onErrorLoad
   };
 })();

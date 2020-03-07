@@ -2,6 +2,7 @@
 
 (function () {
   var VERTICAL_OFFSET_MAIN_PIN = 16;
+  var ERROR_LOAD_MESSAGE = 'Ошибка загрузки объявления';
 
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
@@ -15,6 +16,7 @@
   var adFormSubmitBtn = adForm.querySelector('.ad-form__submit');
   var userSelectTimeIn = adForm.querySelector('#timein');
   var userSelectTimeOut = adForm.querySelector('#timeout');
+  var resetFormBtn = adForm.querySelector('.ad-form__reset');
 
   var flatPrices = {
     'bungalo': 0,
@@ -43,6 +45,23 @@
   var onTimeoutSelectChange = function () {
     userSelectTimeIn.value = userSelectTimeOut.value;
   };
+  // Функция вызывающая соответствующее действие после попытки отпраитвить форму
+  var onPostDataAction = function () {
+    onResetBtnAction();
+    window.popup.success();
+  };
+  var onErrorPostData = function () {
+    window.popup.error(ERROR_LOAD_MESSAGE, function () {
+      window.backend.postToServer(onPostDataAction, onErrorPostData, new FormData(adForm));
+    });
+  };
+  // Функция сброса формы
+  var onResetBtnAction = function () {
+    adForm.reset();
+    window.map.reset();
+    adForm.classList.add('ad-form--disabled');
+    window.init.begin();
+  };
 
   // Обработчик изменения поля выбора Типа жилья
   userTypeRoomSelect.addEventListener('change', onTypeBoomSelectChange);
@@ -57,9 +76,18 @@
       userСapacitySelect.setCustomValidity('');
     }
   });
+  // Обработчик события отправки формы
+  adForm.addEventListener('submit', function (evt) {
+    window.backend.postToServer(onPostDataAction, onErrorPostData, new FormData(adForm));
+    evt.preventDefault();
+  });
+  // Обработчик события сброса формы
+  resetFormBtn.addEventListener('click', onResetBtnAction);
+
 
   window.form = {
     // window.form.
     setInitUserAdressInput: setInitUserAdressInput,
+    onPostDataAction: onPostDataAction,
   };
 })();
