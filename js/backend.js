@@ -3,7 +3,7 @@
 (function () {
   var TIMEOUT_IN_MS = 1000;
   var Url = {
-    GET: 'https://js.dump.academy/keksobooking/data',
+    GET: 'https://js.dump.academy/keksobooking/data1',
     POST: 'https://js.dump.academy/keksobooking'
   };
   var StatusCode = {

@@ -9,6 +9,18 @@
   .content
   .querySelector('.success');
 
+
+  var popupEscPress = function (evt, callback) {
+    window.utils.isEscEvent(evt, function () {
+      callback();
+    });
+  };
+  var popupClick = function (evt, callback) {
+    if (evt.target === evt.currentTarget) {
+      callback();
+    }
+  };
+
   var error = function (errorMessage, btnAction) {
     var errorPopup = errorTemplate.cloneNode(true);
     var errorButton = errorPopup.querySelector('.error__button');
@@ -23,15 +35,21 @@
       removeError();
       btnAction();
     };
+    // var onPopupEscPress = function (evt) {
+    //   window.utils.isEscEvent(evt, function () {
+    //     removeError();
+    //   });
+    // };
+    // var onPopupClick = function (evt) {
+    //   if (evt.target === evt.currentTarget) {
+    //     removeError();
+    //   }
+    // };
     var onPopupEscPress = function (evt) {
-      window.utils.isEscEvent(evt, function () {
-        removeError();
-      });
+      popupEscPress(evt, removeError);
     };
     var onPopupClick = function (evt) {
-      if (evt.target === evt.currentTarget) {
-        removeError();
-      }
+      popupClick(evt, removeError);
     };
 
     errorPopup.querySelector('.error__message').textContent = errorMessage;
@@ -50,15 +68,21 @@
       document.removeEventListener('keydown', onPopupEscPress);
       successPopup.removeEventListener('click', onPopupClick);
     };
+    // var onPopupEscPress = function (evt) {
+    //   window.utils.isEscEvent(evt, function () {
+    //     removeSuccess();
+    //   });
+    // };
+    // var onPopupClick = function (evt) {
+    //   if (evt.target === evt.currentTarget) {
+    //     removeSuccess();
+    //   }
+    // };
     var onPopupEscPress = function (evt) {
-      window.utils.isEscEvent(evt, function () {
-        removeSuccess();
-      });
+      popupEscPress(evt, removeSuccess);
     };
     var onPopupClick = function (evt) {
-      if (evt.target === evt.currentTarget) {
-        removeSuccess();
-      }
+      popupClick(evt, removeSuccess);
     };
 
     mein.appendChild(successPopup);
