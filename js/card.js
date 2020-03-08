@@ -51,6 +51,7 @@
         card.parentNode.removeChild(card);
       }
       document.removeEventListener('keydown', onPupopEscPress);
+      window.map.removeClassPinActive();
     };
     var onPupopEscPress = function (evt) {
       window.utils.isEscEvent(evt, function () {

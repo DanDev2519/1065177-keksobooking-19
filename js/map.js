@@ -9,11 +9,14 @@
   var userMainPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
 
+  var removeClassPinActive = function () {
+    mapPins.querySelector('.map__pin--active').classList.remove('map__pin--active');
+  };
   // Функция показывающая подробную информацию объявления по нажатию
   var showCard = function (pin, advert) {
     pin.addEventListener('click', function (evt) {
       evt.preventDefault();
-      drewCardOfAd(advert);
+      drewCardOfAd(pin, advert);
     });
   };
   // Функция заполнения блока элементами - указатель
@@ -34,9 +37,10 @@
 
   };
   // Функция заплнения блока элементами - карточка объявления
-  var drewCardOfAd = function (advert) {
+  var drewCardOfAd = function (pin, advert) {
     if (!mapPins.querySelector('.map__card')) {
       mapPins.appendChild(window.card.renderOfAd(advert));
+      pin.classList.add('map__pin--active');
     }
   };
   // Функция активации страницы по нажатию на главный pin на карте
@@ -46,7 +50,6 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     window.utils.removeAttributeDisabledChildren(adForm);
-    window.utils.removeAttributeDisabledChildren(mapFilters);
     userMainPin.removeEventListener('mousedown', onMainPinMousePressInit);
     userMainPin.removeEventListener('keydown', onMainPinEnterPressInit);
     userMainPin.addEventListener('mousedown', onMainPinMousDown);
@@ -114,6 +117,7 @@
   // Функции успешной и неуспешной загрузки данных с сервера
   var onSuccessLoad = function (pins) {
     drewPins(pins);
+    window.utils.removeAttributeDisabledChildren(mapFilters);
   };
   var onErrorLoad = function (errorMessage) {
     window.popup.error(errorMessage, function () {
@@ -127,6 +131,7 @@
 
   window.map = {
     // window.map.
+    removeClassPinActive: removeClassPinActive,
     onSuccessLoad: onSuccessLoad,
     onErrorLoad: onErrorLoad,
     reset: resetMap
