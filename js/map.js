@@ -21,8 +21,10 @@
   };
   // Функция заполнения блока элементами - указатель
   var drewPins = function (adverts) {
+    var takeNumber = adverts.length > 5 ? 5 : adverts.length;
+    removePins();
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < adverts.length; i++) {
+    for (var i = 0; i < takeNumber; i++) {
       var pin = window.pin.render(adverts[i]);
       showCard(pin, adverts[i]);
       fragment.appendChild(pin);
@@ -34,7 +36,6 @@
     for (var i = 0; i < pins.length; i++) {
       pins[i].remove();
     }
-
   };
   // Функция заплнения блока элементами - карточка объявления
   var drewCardOfAd = function (pin, advert) {
@@ -45,7 +46,7 @@
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
-    window.backend.getFromServer(onSuccessLoad, onErrorLoad);
+    window.backend.getFromServer(window.filters.onSuccessLoad, window.filters.onErrorLoad);
 
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -114,16 +115,18 @@
     document.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
   };
-  // Функции успешной и неуспешной загрузки данных с сервера
-  var onSuccessLoad = function (pins) {
-    drewPins(pins);
-    window.utils.removeAttributeDisabledChildren(mapFilters);
-  };
-  var onErrorLoad = function (errorMessage) {
-    window.popup.error(errorMessage, function () {
-      window.backend.getFromServer(onSuccessLoad, onErrorLoad);
-    });
-  };
+  // // Функции успешной и неуспешной загрузки данных с сервера
+  // var pins = [];
+  // var onSuccessLoad = function (data) {
+  //   pins = data;
+  //   drewPins(pins);
+  //   window.utils.removeAttributeDisabledChildren(mapFilters);
+  // };
+  // var onErrorLoad = function (errorMessage) {
+  //   window.popup.error(errorMessage, function () {
+  //     window.backend.getFromServer(onSuccessLoad, onErrorLoad);
+  //   });
+  // };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
 
@@ -132,8 +135,10 @@
   window.map = {
     // window.map.
     removeClassPinActive: removeClassPinActive,
-    onSuccessLoad: onSuccessLoad,
-    onErrorLoad: onErrorLoad,
+
+    drewPins: drewPins,
+    // onSuccessLoad: onSuccessLoad,
+    // onErrorLoad: onErrorLoad,
     reset: resetMap
   };
 

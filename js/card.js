@@ -42,26 +42,40 @@
       }
     }
   };
+
+
+  var closePopup = function (card) {
+    if (card.parentNode) {
+      card.parentNode.removeChild(card);
+    }
+    document.removeEventListener('keydown', onPupopEscPress);
+    window.map.removeClassPinActive();
+  };
+  var onPupopEscPress = function (evt) {
+    window.utils.isEscEvent(evt, function () {
+      closePopup(document.querySelector('.map__card'));
+    });
+  };
   // Функция, описывающая взаимодействие пользователя с карточкой объявления
   var userCardActions = function (card) {
     var closeButton = card.querySelector('.popup__close');
 
-    var closePopup = function () {
-      if (card.parentNode) {
-        card.parentNode.removeChild(card);
-      }
-      document.removeEventListener('keydown', onPupopEscPress);
-      window.map.removeClassPinActive();
-    };
-    var onPupopEscPress = function (evt) {
-      window.utils.isEscEvent(evt, function () {
-        closePopup();
-      });
-    };
+    // var closePopup = function () {
+    //   if (card.parentNode) {
+    //     card.parentNode.removeChild(card);
+    //   }
+    //   document.removeEventListener('keydown', onPupopEscPress);
+    //   window.map.removeClassPinActive();
+    // };
+    // var onPupopEscPress = function (evt) {
+    //   window.utils.isEscEvent(evt, function () {
+    //     closePopup();
+    //   });
+    // };
 
     closeButton.addEventListener('click', function (evt) {
       evt.preventDefault();
-      closePopup();
+      closePopup(card);
     });
     document.addEventListener('keydown', onPupopEscPress);
   };
@@ -87,6 +101,7 @@
 
   window.card = {
     // window.card.
+    closePopup: closePopup,
     renderOfAd: renderCardOfAd
   };
 })();
