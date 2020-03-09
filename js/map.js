@@ -2,7 +2,6 @@
 
 (function () {
   var VERTICAL_OFFSET_MAIN_PIN = 16;
-  var NUMBER_OF_ADS = 5;
 
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
@@ -21,10 +20,9 @@
   };
   // Функция заполнения блока элементами - указатель
   var drewPins = function (adverts) {
-    var takeNumber = adverts.length > NUMBER_OF_ADS ? NUMBER_OF_ADS : adverts.length;
     removePins();
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < takeNumber; i++) {
+    for (var i = 0; i < adverts.length; i++) {
       var pin = window.pin.render(adverts[i]);
       showCard(pin, adverts[i]);
       fragment.appendChild(pin);
@@ -115,18 +113,6 @@
     document.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
   };
-  // // Функции успешной и неуспешной загрузки данных с сервера
-  // var pins = [];
-  // var onSuccessLoad = function (data) {
-  //   pins = data;
-  //   drewPins(pins);
-  //   window.utils.removeAttributeDisabledChildren(mapFilters);
-  // };
-  // var onErrorLoad = function (errorMessage) {
-  //   window.popup.error(errorMessage, function () {
-  //     window.backend.getFromServer(onSuccessLoad, onErrorLoad);
-  //   });
-  // };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
 
@@ -135,10 +121,7 @@
   window.map = {
     // window.map.
     removeClassPinActive: removeClassPinActive,
-
     drewPins: drewPins,
-    // onSuccessLoad: onSuccessLoad,
-    // onErrorLoad: onErrorLoad,
     reset: resetMap
   };
 

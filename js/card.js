@@ -44,38 +44,27 @@
   };
 
 
-  var closePopup = function (card) {
-    if (card.parentNode) {
-      card.parentNode.removeChild(card);
+  var closePopup = function () {
+    var card = document.querySelector('.map__card');
+    if (!card) {
+      return;
     }
+    card.remove();
     document.removeEventListener('keydown', onPupopEscPress);
     window.map.removeClassPinActive();
   };
   var onPupopEscPress = function (evt) {
     window.utils.isEscEvent(evt, function () {
-      closePopup(document.querySelector('.map__card'));
+      closePopup();
     });
   };
   // Функция, описывающая взаимодействие пользователя с карточкой объявления
   var userCardActions = function (card) {
     var closeButton = card.querySelector('.popup__close');
 
-    // var closePopup = function () {
-    //   if (card.parentNode) {
-    //     card.parentNode.removeChild(card);
-    //   }
-    //   document.removeEventListener('keydown', onPupopEscPress);
-    //   window.map.removeClassPinActive();
-    // };
-    // var onPupopEscPress = function (evt) {
-    //   window.utils.isEscEvent(evt, function () {
-    //     closePopup();
-    //   });
-    // };
-
     closeButton.addEventListener('click', function (evt) {
       evt.preventDefault();
-      closePopup(card);
+      closePopup();
     });
     document.addEventListener('keydown', onPupopEscPress);
   };

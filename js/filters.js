@@ -1,36 +1,48 @@
 'use strict';
 
 (function () {
+  var NUMBER_OF_ADS = 5;
   var pins = [];
-  var housingType;
 
   var mapFilters = document.querySelector('.map__filters');
   var housingTypeFilter = mapFilters.querySelector('#housing-type');
 
 
-  var updatePins = function () {
-    var isMapCard = document.querySelector('.map__card');
-    if (isMapCard) {
-      window.card.closePopup(isMapCard);
-    }
+  var filterByHousingType = function (it) {
+    return it.offer.type === housingTypeFilter.value || housingTypeFilter.value === 'any';
+  };
 
-    housingType = housingTypeFilter.value === 'any' ? undefined : housingTypeFilter.value;
-    var sameHousingType = pins.filter(function (it) {
-      // return it.offer.type === housingType;
-      if (housingType === undefined) {
-        return true;
-      } else {
-        return it.offer.type === housingType;
+  var filterPins = function () {
+    var i = 0;
+    var resultArray = [];
+    while (i < pins.length && resultArray.length < NUMBER_OF_ADS) {
+      if (filterByHousingType(pins[i])) {
+        resultArray.push(pins[i]);
       }
-    });
+      i++;
+    }
+    return resultArray;
+  };
 
-    window.map.drewPins(sameHousingType);
+  var updatePins = function () {
+    window.card.closePopup();
+
+    var resultPins = filterPins();
+    // var resultPins = pins.filter(function (it) {
+    //   return filterByHousingType(it);
+    // });
+
+    window.map.drewPins(resultPins);
+  };
+
+  var unlockFilters = function () {
+    window.utils.removeAttributeDisabledChildren(mapFilters);
   };
   // Функции успешной и неуспешной загрузки данных с сервера
   var onSuccessLoad = function (data) {
     pins = data;
     updatePins();
-    window.utils.removeAttributeDisabledChildren(mapFilters);
+    unlockFilters();
   };
   var onErrorLoad = function (errorMessage) {
     window.popup.error(errorMessage, function () {
@@ -39,14 +51,13 @@
   };
 
 
-  housingTypeFilter.addEventListener('change', updatePins);
+  mapFilters.addEventListener('change', updatePins);
 
 
   window.filters = {
     // window.filters.
     onSuccessLoad: onSuccessLoad,
     onErrorLoad: onErrorLoad
-
   };
 
 })();
