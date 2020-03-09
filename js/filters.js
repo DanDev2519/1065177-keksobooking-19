@@ -14,6 +14,7 @@
       window.card.closePopup(isMapCard);
     }
 
+    housingType = housingTypeFilter.value === 'any' ? undefined : housingTypeFilter.value;
     var sameHousingType = pins.filter(function (it) {
       // return it.offer.type === housingType;
       if (housingType === undefined) {
@@ -38,11 +39,7 @@
   };
 
 
-  housingTypeFilter.addEventListener('change', function () {
-    // housingType = housingTypeFilter.value;
-    housingType = housingTypeFilter.value === 'any' ? undefined : housingTypeFilter.value;
-    updatePins();
-  });
+  housingTypeFilter.addEventListener('change', updatePins);
 
 
   window.filters = {

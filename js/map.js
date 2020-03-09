@@ -2,9 +2,9 @@
 
 (function () {
   var VERTICAL_OFFSET_MAIN_PIN = 16;
+  var NUMBER_OF_ADS = 5;
 
   var map = document.querySelector('.map');
-  var mapFilters = document.querySelector('.map__filters');
   var mapPins = map.querySelector('.map__pins');
   var userMainPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
@@ -21,7 +21,7 @@
   };
   // Функция заполнения блока элементами - указатель
   var drewPins = function (adverts) {
-    var takeNumber = adverts.length > 5 ? 5 : adverts.length;
+    var takeNumber = adverts.length > NUMBER_OF_ADS ? NUMBER_OF_ADS : adverts.length;
     removePins();
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < takeNumber; i++) {
