@@ -42,21 +42,25 @@
       }
     }
   };
+
+
+  var closePopup = function () {
+    var card = document.querySelector('.map__card');
+    if (!card) {
+      return;
+    }
+    card.remove();
+    document.removeEventListener('keydown', onPupopEscPress);
+    window.map.removeClassPinActive();
+  };
+  var onPupopEscPress = function (evt) {
+    window.utils.isEscEvent(evt, function () {
+      closePopup();
+    });
+  };
   // Функция, описывающая взаимодействие пользователя с карточкой объявления
   var userCardActions = function (card) {
     var closeButton = card.querySelector('.popup__close');
-
-    var closePopup = function () {
-      if (card.parentNode) {
-        card.parentNode.removeChild(card);
-      }
-      document.removeEventListener('keydown', onPupopEscPress);
-    };
-    var onPupopEscPress = function (evt) {
-      window.utils.isEscEvent(evt, function () {
-        closePopup();
-      });
-    };
 
     closeButton.addEventListener('click', function (evt) {
       evt.preventDefault();
@@ -86,6 +90,7 @@
 
   window.card = {
     // window.card.
+    closePopup: closePopup,
     renderOfAd: renderCardOfAd
   };
 })();

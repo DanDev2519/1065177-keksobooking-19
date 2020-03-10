@@ -4,20 +4,23 @@
   var VERTICAL_OFFSET_MAIN_PIN = 16;
 
   var map = document.querySelector('.map');
-  var mapFilters = document.querySelector('.map__filters');
   var mapPins = map.querySelector('.map__pins');
   var userMainPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
 
+  var removeClassPinActive = function () {
+    mapPins.querySelector('.map__pin--active').classList.remove('map__pin--active');
+  };
   // Функция показывающая подробную информацию объявления по нажатию
   var showCard = function (pin, advert) {
     pin.addEventListener('click', function (evt) {
       evt.preventDefault();
-      drewCardOfAd(advert);
+      drewCardOfAd(pin, advert);
     });
   };
   // Функция заполнения блока элементами - указатель
   var drewPins = function (adverts) {
+    removePins();
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < adverts.length; i++) {
       var pin = window.pin.render(adverts[i]);
@@ -31,22 +34,21 @@
     for (var i = 0; i < pins.length; i++) {
       pins[i].remove();
     }
-
   };
   // Функция заплнения блока элементами - карточка объявления
-  var drewCardOfAd = function (advert) {
+  var drewCardOfAd = function (pin, advert) {
     if (!mapPins.querySelector('.map__card')) {
       mapPins.appendChild(window.card.renderOfAd(advert));
+      pin.classList.add('map__pin--active');
     }
   };
   // Функция активации страницы по нажатию на главный pin на карте
   var activation = function () {
-    window.backend.getFromServer(onSuccessLoad, onErrorLoad);
+    window.backend.getFromServer(window.filters.onSuccessLoad, window.filters.onErrorLoad);
 
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     window.utils.removeAttributeDisabledChildren(adForm);
-    window.utils.removeAttributeDisabledChildren(mapFilters);
     userMainPin.removeEventListener('mousedown', onMainPinMousePressInit);
     userMainPin.removeEventListener('keydown', onMainPinEnterPressInit);
     userMainPin.addEventListener('mousedown', onMainPinMousDown);
@@ -111,15 +113,6 @@
     document.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
   };
-  // Функции успешной и неуспешной загрузки данных с сервера
-  var onSuccessLoad = function (pins) {
-    drewPins(pins);
-  };
-  var onErrorLoad = function (errorMessage) {
-    window.popup.error(errorMessage, function () {
-      window.backend.getFromServer(onSuccessLoad, onErrorLoad);
-    });
-  };
 
   userMainPin.addEventListener('mousedown', onMainPinMousePressInit);
 
@@ -127,8 +120,8 @@
 
   window.map = {
     // window.map.
-    onSuccessLoad: onSuccessLoad,
-    onErrorLoad: onErrorLoad,
+    removeClassPinActive: removeClassPinActive,
+    drewPins: drewPins,
     reset: resetMap
   };
 
