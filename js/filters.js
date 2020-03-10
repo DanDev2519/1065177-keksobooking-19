@@ -48,9 +48,6 @@
     window.card.closePopup();
 
     var resultPins = filterPins();
-    // var resultPins = pins.filter(function (it) {
-    //   return filterByHousingType(it);
-    // });
 
     window.map.drewPins(resultPins);
   };
@@ -71,7 +68,7 @@
   };
 
 
-  mapFilters.addEventListener('change', updatePins);
+  mapFilters.addEventListener('change', window.utils.debounce(updatePins));
 
 
   window.filters = {
