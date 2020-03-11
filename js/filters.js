@@ -11,6 +11,12 @@
   var housingGuestsFilter = mapFilters.querySelector('#housing-guests');
   var features = mapFilters.querySelectorAll('.map__checkbox');
 
+  var HousingPrice = {
+    LOW: 10000,
+    HIGH: 50000
+  };
+
+
   var isNotChecked = function (it) {
     return it.checked === false;
   };
@@ -34,11 +40,11 @@
   };
   var filterByHousingPrice = function (it) {
     var priceRang = 'any';
-    if (it.offer.price < 10000) {
+    if (it.offer.price < HousingPrice.LOW) {
       priceRang = 'low';
-    } else if (it.offer.price > 50000) {
+    } else if (it.offer.price > HousingPrice.HIGH) {
       priceRang = 'high';
-    } else if (it.offer.price >= 10000 && it.offer.price <= 50000) {
+    } else if (it.offer.price >= HousingPrice.LOW && it.offer.price <= HousingPrice.HIGH) {
       priceRang = 'middle';
     }
     return priceRang === housingPriceFilter.value || housingPriceFilter.value === 'any';
