@@ -25,9 +25,11 @@
     removePins();
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < adverts.length; i++) {
-      var pin = window.pin.render(adverts[i]);
-      showCard(pin, adverts[i]);
-      fragment.appendChild(pin);
+      if (adverts[i].offer) {
+        var pin = window.pin.render(adverts[i]);
+        showCard(pin, adverts[i]);
+        fragment.appendChild(pin);
+      }
     }
     mapPins.appendChild(fragment);
   };
