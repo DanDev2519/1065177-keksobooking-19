@@ -20,18 +20,18 @@
   var isNotChecked = function (it) {
     return it.checked === false;
   };
+  var shearchChecked = function (it) {
+    var featuresArray = Array.from(features);
+    return featuresArray.filter(function (selectedFeature) {
+      return selectedFeature.checked;
+    })
+    .every(function (checkbox) {
+      return (it.offer.features.some(function (adFeature) {
+        return checkbox.value === adFeature;
+      }));
+    });
+  };
   var filterByFeatures = function (it) {
-    var shearchChecked = function () {
-      var featuresArray = Array.from(features);
-      for (var i = 0; i < featuresArray.length; i++) {
-        if (featuresArray[i].checked) {
-          if (it.offer.features.indexOf(featuresArray[i].value) !== -1) {
-            return true;
-          }
-        }
-      }
-      return false;
-    };
     return Array.from(features).every(isNotChecked) || shearchChecked(it);
   };
 
