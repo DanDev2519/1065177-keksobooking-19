@@ -59,6 +59,8 @@
   var onResetBtnAction = function () {
     adForm.reset();
     window.map.reset();
+    window.filters.reset();
+    window.card.closePopup();
     adForm.classList.add('ad-form--disabled');
     window.init.begin();
   };

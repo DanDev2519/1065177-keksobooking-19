@@ -9,7 +9,9 @@
   var adForm = document.querySelector('.ad-form');
 
   var removeClassPinActive = function () {
-    mapPins.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    if (mapPins.querySelector('.map__pin--active')) {
+      mapPins.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    }
   };
   // Функция показывающая подробную информацию объявления по нажатию
   var showCard = function (pin, advert) {

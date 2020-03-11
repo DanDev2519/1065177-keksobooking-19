@@ -91,12 +91,16 @@
     });
   };
 
+  var reset = function () {
+    mapFilters.reset();
+  };
 
   mapFilters.addEventListener('change', window.utils.debounce(updatePins));
 
 
   window.filters = {
     // window.filters.
+    reset: reset,
     onSuccessLoad: onSuccessLoad,
     onErrorLoad: onErrorLoad
   };
