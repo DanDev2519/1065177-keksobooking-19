@@ -17,6 +17,8 @@
   var showCard = function (pin, advert) {
     pin.addEventListener('click', function (evt) {
       evt.preventDefault();
+      removeClassPinActive();
+      window.card.closePopup();
       drewCardOfAd(pin, advert);
     });
   };
