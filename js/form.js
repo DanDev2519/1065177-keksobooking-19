@@ -17,6 +17,8 @@
   var userSelectTimeIn = adForm.querySelector('#timein');
   var userSelectTimeOut = adForm.querySelector('#timeout');
   var resetFormBtn = adForm.querySelector('.ad-form__reset');
+  var avatarPreview = adForm.querySelector('.ad-form-header__preview').querySelector('img');
+  var housingPhotos = adForm.querySelector('.ad-form__photo');
 
   var flatPrices = {
     'bungalo': 0,
@@ -32,6 +34,14 @@
     var userMainPinX = Math.round(userMainPinProperties.left - mapPinsProperties.left + userMainPinProperties.width / 2);
     var userMainPinY = Math.round(userMainPinProperties.top + mapPinsProperties.top + 2 * window.scrollY + (withTail ? userMainPinProperties.height + VERTICAL_OFFSET_MAIN_PIN : userMainPinProperties.height / 2));
     userAddressInput.value = userMainPinX + ', ' + userMainPinY;
+  };
+  var resetAvatar = function () {
+    avatarPreview.src = 'img/muffin-grey.svg';
+  };
+  var removeChildren = function (parent) {
+    while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+    }
   };
   // Функция валидации Типа жилья и Цены за ночь
   var onTypeBoomSelectChange = function () {
@@ -58,6 +68,8 @@
   // Функция сброса формы
   var onResetBtnAction = function () {
     adForm.reset();
+    resetAvatar();
+    removeChildren(housingPhotos);
     window.map.reset();
     window.filters.reset();
     window.card.closePopup();
