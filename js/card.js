@@ -21,12 +21,16 @@
       var flag = 0;
       for (var j = 0; j < ad.offer.features.length; j++) {
         var feature = ad.offer.features[j];
-        if (сlassesСompare.indexOf(feature) !== -1) {
+        if (сlassesСompare.endsWith('--' + feature)) {
           flag += 1;
         }
       }
       if (flag === 0) {
         popupFeatures.removeChild(featureElement[i]);
+        if (!featureElement.length) {
+          popupFeatures.remove();
+        }
+        i--;
       }
     }
   };
@@ -34,12 +38,16 @@
   var renderCardPhotos = function (card, ad) {
     var popupPhotos = card.querySelector('.popup__photos');
     var photo = popupPhotos.children;
-    photo[0].src = ad.offer.photos[0];
-    if (ad.offer.photos.length > 1) {
-      for (var i = 1; i < ad.offer.photos.length; i++) {
-        popupPhotos.appendChild(photo[0].cloneNode(true));
-        photo[i].src = ad.offer.photos[i];
+    if (ad.offer.photos[0]) {
+      photo[0].src = ad.offer.photos[0];
+      if (ad.offer.photos.length > 1) {
+        for (var i = 1; i < ad.offer.photos.length; i++) {
+          popupPhotos.appendChild(photo[0].cloneNode(true));
+          photo[i].src = ad.offer.photos[i];
+        }
       }
+    } else {
+      popupPhotos.remove();
     }
   };
 
