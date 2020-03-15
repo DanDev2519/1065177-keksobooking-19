@@ -12,7 +12,7 @@
   var userRoomNumberSelect = adForm.querySelector('#room_number');
   var userСapacitySelect = adForm.querySelector('#capacity');
   var userTypeRoomSelect = adForm.querySelector('#type');
-  var userPriseNight = adForm.querySelector('#price');
+  var userPriceNight = adForm.querySelector('#price');
   var adFormSubmitBtn = adForm.querySelector('.ad-form__submit');
   var userSelectTimeIn = adForm.querySelector('#timein');
   var userSelectTimeOut = adForm.querySelector('#timeout');
@@ -37,13 +37,13 @@
   var resetAvatar = function () {
     avatarPreview.src = 'img/muffin-grey.svg';
   };
-  var resetPriseNight = function () {
+  var resetPriceNight = function () {
     onTypeRoomSelectChange();
   };
   // Функция валидации Типа жилья и Цены за ночь
   var onTypeRoomSelectChange = function () {
-    userPriseNight.min = flatPrices[userTypeRoomSelect.value];
-    userPriseNight.placeholder = flatPrices[userTypeRoomSelect.value];
+    userPriceNight.min = flatPrices[userTypeRoomSelect.value];
+    userPriceNight.placeholder = flatPrices[userTypeRoomSelect.value];
   };
   // Функция синхронизации полей времени заезда и выезда
   var onTimeinSelectChange = function () {
@@ -66,7 +66,7 @@
   var onResetBtnAction = function () {
     adForm.reset();
     resetAvatar();
-    resetPriseNight();
+    resetPriceNight();
     window.photo.remove();
     window.map.reset();
     window.filters.reset();
