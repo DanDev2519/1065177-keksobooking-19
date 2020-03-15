@@ -38,11 +38,11 @@
   // Функция генерации массива случайной длины из другого массива с вариантам без повтора
   var getArrayNoRepeatFrom = function (arrayIn) {
     var arrayOut = [];
-    var length = window.utils.getRandomIntInclusive(0, arrayIn.length);
+    var length = getRandomIntInclusive(0, arrayIn.length);
     for (var i = 0; i < length; i++) {
-      var arrayEl = arrayIn[window.utils.getRandomInt(0, arrayIn.length)];
+      var arrayEl = arrayIn[getRandomInt(0, arrayIn.length)];
       while (arrayOut.indexOf(arrayEl) !== -1) {
-        arrayEl = arrayIn[window.utils.getRandomInt(0, arrayIn.length)];
+        arrayEl = arrayIn[getRandomInt(0, arrayIn.length)];
       }
       arrayOut.push(arrayEl);
     }
@@ -50,15 +50,15 @@
   };
   // Функция добавления атрибута disabled дочерним элементам
   var setAttributeDisabledChildren = function (parent) {
-    for (var i = 0; i < parent.children.length; i++) {
-      parent.children[i].setAttribute('disabled', 'disabled');
-    }
+    Array.from(parent.children).forEach(function (child) {
+      child.setAttribute('disabled', 'disabled');
+    });
   };
   // Функция удаления атрибута disabled дочерним элементам
   var removeAttributeDisabledChildren = function (parent) {
-    for (var i = 0; i < parent.children.length; i++) {
-      parent.children[i].removeAttribute('disabled', 'disabled');
-    }
+    Array.from(parent.children).forEach(function (child) {
+      child.removeAttribute('disabled', 'disabled');
+    });
   };
 
   var debounce = function (cb) {

@@ -16,15 +16,15 @@
   var renderCardFeatures = function (card, ad) {
     var popupFeatures = card.querySelector('.popup__features');
     var featureElement = popupFeatures.children;
+    // for более уместен чем forEach - for необходим для логики
     for (var i = 0; i < featureElement.length; i++) {
       var сlassesСompare = featureElement[i].getAttribute('class');
       var flag = 0;
-      for (var j = 0; j < ad.offer.features.length; j++) {
-        var feature = ad.offer.features[j];
-        if (сlassesСompare.endsWith('--' + feature)) {
+      ad.offer.features.forEach(function (it) {
+        if (сlassesСompare.endsWith('--' + it)) {
           flag += 1;
         }
-      }
+      });
       if (flag === 0) {
         popupFeatures.removeChild(featureElement[i]);
         if (!featureElement.length) {
