@@ -17,6 +17,8 @@
   var showCard = function (pin, advert) {
     pin.addEventListener('click', function (evt) {
       evt.preventDefault();
+      removeClassPinActive();
+      window.card.closePopup();
       drewCardOfAd(pin, advert);
     });
   };
@@ -24,20 +26,20 @@
   var drewPins = function (adverts) {
     removePins();
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < adverts.length; i++) {
-      if (adverts[i].offer) {
-        var pin = window.pin.render(adverts[i]);
-        showCard(pin, adverts[i]);
+    adverts.forEach(function (advert) {
+      if (advert.offer) {
+        var pin = window.pin.render(advert);
+        showCard(pin, advert);
         fragment.appendChild(pin);
       }
-    }
+    });
     mapPins.appendChild(fragment);
   };
   var removePins = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].remove();
-    }
+    Array.from(pins).forEach(function (pin) {
+      pin.remove();
+    });
   };
   // Функция заплнения блока элементами - карточка объявления
   var drewCardOfAd = function (pin, advert) {
