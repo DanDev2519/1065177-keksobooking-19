@@ -37,8 +37,11 @@
   var resetAvatar = function () {
     avatarPreview.src = 'img/muffin-grey.svg';
   };
+  var resetPriseNight = function () {
+    onTypeRoomSelectChange();
+  };
   // Функция валидации Типа жилья и Цены за ночь
-  var onTypeBoomSelectChange = function () {
+  var onTypeRoomSelectChange = function () {
     userPriseNight.min = flatPrices[userTypeRoomSelect.value];
     userPriseNight.placeholder = flatPrices[userTypeRoomSelect.value];
   };
@@ -63,6 +66,7 @@
   var onResetBtnAction = function () {
     adForm.reset();
     resetAvatar();
+    resetPriseNight();
     window.photo.remove();
     window.map.reset();
     window.filters.reset();
@@ -72,7 +76,7 @@
   };
 
   // Обработчик изменения поля выбора Типа жилья
-  userTypeRoomSelect.addEventListener('change', onTypeBoomSelectChange);
+  userTypeRoomSelect.addEventListener('change', onTypeRoomSelectChange);
   // Обрботчик изменения времени заезда и выезда
   userSelectTimeIn.addEventListener('change', onTimeinSelectChange);
   userSelectTimeOut.addEventListener('change', onTimeoutSelectChange);
